@@ -1,0 +1,20 @@
+REST API -JSON
+
+GET /api/USERS - LIST ALL
+
+
+get user with id 1--n ----------------
+
+GET /api/user/1
+GET /api/user/2
+GET /api/user/n
+
+Dynamic path parameters
+GET /api/user/:id 
+(:) means dynamic  id - var
+------------------------------------------
+POST /api/user - create new USERS
+
+PATCH /api/user/id -Edit the user with id n
+
+DELETE /api/users/1 - del user with id 1
