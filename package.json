@@ -1,0 +1,22 @@
+{
+  "name": "http_in_node",
+  "version": "1.0.0",
+  "description": "http server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omjamkhute/Node_js_2week.git"
+  },
+  "author": "oj-b",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omjamkhute/Node_js_2week/issues"
+  },
+  "homepage": "https://github.com/omjamkhute/Node_js_2week#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
