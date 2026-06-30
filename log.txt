@@ -1,0 +1,27 @@
+ versoning
+  "express": "^5.2.1"
+
+
+  1st - 5
+  2nd - 2
+  3rd - 1
+
+  --> 3rd - minor fixes (optional)
+  example: typo error fixes
+
+  --> 2nd - recommanded bug fix (security)
+  example: needed feature added
+
+  --> 3rd - major released
+
+  Note: npm i express@5.5.0 we can add according to us
+  1. Dont change version for existing project
+
+ A.  n0te : (^) dont change version with ^ this 
+   ex: ^5 dont change to 6 or 4 | allow 2 or 3 place change 
+   lock major release 
+   without ^ we can manualy update
+
+B . n0te : (~)  We dont want to change 2nd place also
+     "express": "~5.2.1" 
+     dont change recommnded version too
