@@ -4,12 +4,30 @@ const fs = require("fs");
 const app = express();
 const PORT = 8000;
 
-// Middleware (must come first)
+// Middleware (must come first)-----------------------------------------------------------
 app.use(express.urlencoded({ extended: false }));
 // app.use(express.json()); still work
 
+// next means next middleware or route fn
+app.use((req,res, next) =>{ 
+   console.log("Middleware one....!")
+   req.myUsername = "Om boss";
+   // req get stuck here - return res.json({msg: "Middile ware res end"});
+   next(); // express pass automatically 
+});
 
-// examples
+app.use((req,res, next) =>{ 
+  fs.appendFile(
+    'log.txt',
+    `${Date.now()}: ${req.method}: ${req.ip}: ${req.path}\n`,
+          (err,data) =>{
+            next();
+          });
+ //   return res.json({msg: "Middile ware res end"});  // req get stuck here -
+ // express pass automatically 
+});
+
+// examples------------------------------------------------------------------------------
 app.get('/users' , (req,res) =>{
     const html = `
     <ol>
@@ -28,7 +46,7 @@ app.get('/api/users' , (req,res) =>{
 
 
  app 
- .route("/api/users")  //  app.route("/api/users/:id") for specific user 
+ .route("/api/users/:id")  //  app.route("/api/users/:id") for specific user 
  .get((req,res) =>{
       const id = Number(req.params.id);
     const user = users.find((user) => user.id === id);
