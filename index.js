@@ -40,7 +40,8 @@ app.get('/users' , (req,res) =>{
 // route----------------------------------
 
 app.get('/api/users' , (req,res) =>{
- 
+    // x - means custom header
+    res.setHeader("X-MyName", "OM sallu");
     return res.json(users);
 });
 
@@ -48,6 +49,7 @@ app.get('/api/users' , (req,res) =>{
  app 
  .route("/api/users/:id")  //  app.route("/api/users/:id") for specific user 
  .get((req,res) =>{
+    
       const id = Number(req.params.id);
     const user = users.find((user) => user.id === id);
     return res.json(user);

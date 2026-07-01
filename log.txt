@@ -5,3 +5,10 @@
 1782933286629: POST: /api/users/105
 1782933397366: POST: ::1: /api/users/105
 1782933404393: POST: ::1: /api/users/106
+1782937107780: GET: ::1: /api/users/106
+1782937174023: GET: ::1: /api/users
+1782937201011: GET: ::1: /api/users
+1782937254935: GET: ::1: /api/users
+1782937300270: GET: ::1: /api/users
+1782937416667: GET: ::1: /api/users
+1782937626599: GET: ::1: /api/users
