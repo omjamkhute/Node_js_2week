@@ -1,7 +1,12 @@
 const express = require("express");
 const users = require("./MOCK_DATA.json");
+const fs = require("fs");
 const app = express();
 const PORT = 8000;
+
+// Middleware (must come first)
+app.use(express.urlencoded({ extended: false }));
+// app.use(express.json()); still work
 
 
 // examples
@@ -18,52 +23,40 @@ app.get('/users' , (req,res) =>{
 
 app.get('/api/users' , (req,res) =>{
  
-    return res.json(user);
+    return res.json(users);
 });
 
 
-// by id-------------------------------------------------
-// app.get('/api/users/:id' , (req,res) =>{
-//     const id = Number(req.params.id);
-//     const user = users.find((user) => user.id === id);
-
-//     return res.json(user);
-// });
-
-// // post
-// app.post('/api/users', (req,res) =>{
-//    // create new user
-//     return res.json({ status: "pending"});
-// });
-
-// // patch - edit
-// app.patch('/api/users/:id', (req,res) =>{
-//    // edit user with id
-//     return res.json({ status: "pending"});
-// });
-
-// // delete
-// app.delete('/api/users/:id', (req,res) =>{
-//    // delete user with id
-//     return res.json({ status: "pending"});
-// });
- // or ----------------------------------------------------
-
  app 
- .route("/api/users/:id")
+ .route("/api/users")  //  app.route("/api/users/:id") for specific user 
  .get((req,res) =>{
       const id = Number(req.params.id);
     const user = users.find((user) => user.id === id);
     return res.json(user);
  })
+
  .post((req,res) =>{
-     return res.json({ status: "pending"});
+    const body = req.body;
+    console.log("Body",body);
+    // add data in mock folder
+    users.push({ id: users.length + 1  , ...body // +1 
+    });
+    // not sync
+     fs.writeFile('./MOCK_DATA.json',
+        // null - replacer / 2 intendation (space)
+         JSON.stringify(users,null,2), (err, data ) =>{
+        return res.json({ status: "Success", id: users.length + 1
+        });
+    });
  })
- .patch((req,res) =>{
+.patch((req,res) =>{
       return res.json({ status: "pending"});
  })
  .delete((req,res) =>{
       return res.json({ status: "pending"});
  });
+
+
+ // route
 
 app.listen(8000, ()=> console.log(`rest api started..at ${PORT}`));
