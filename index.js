@@ -1,12 +1,49 @@
 const express = require("express");
-const users = require("./MOCK_DATA.json");
 const fs = require("fs");
+const mongoose = require('mongoose');
 const app = express();
 const PORT = 8000;
 
+// connect mongobd
+mongoose
+.connect('mongodb://127.0.0.1:27017/youtube-app-1')
+.then(()=> console.log("mongodb connected yt"))
+.catch((err) => console.log('mongo error',err));
+
+// schema ----------------designe
+const userSchema = new mongoose.Schema({
+   firstName: {
+       type: String,
+       required: true,
+   },
+   lastName: {
+      type: String,
+      required: false,
+   },
+   email: {
+      type: String,
+      required: true,
+      unique: true,
+   },
+   gender: {
+      type: String,
+      required: true,
+   },
+   jobTitle: {
+      type: String,
+      required: true
+   },
+     },
+    { timestamps: true }
+);
+
+// define model-----
+const User = mongoose.model("user", userSchema);
+
 // Middleware (must come first)-----------------------------------------------------------
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: false }));
-// app.use(express.json()); still work
+
 
 // next means next middleware or route fn
 app.use((req,res, next) =>{ 
@@ -27,53 +64,78 @@ app.use((req,res, next) =>{
  // express pass automatically 
 });
 
-// examples------------------------------------------------------------------------------
-app.get('/users' , (req,res) =>{
+// examples---------Routes------------
+app.get('/users' , async  (req,res) =>{
+   const allDbUsers = await User.find({});
     const html = `
     <ol>
-    ${users.map(users => `<li>${users.first_name} ${users.last_name} ${users.email}</li>`).join("")}
+    ${allDbUsers
+      .map(
+         user => 
+            `<li>${user.firstName}
+          ${user.lastName} 
+          ${user.email}</li>`)
+          .join("")}
     </ol>
     `;
     res.send(html);
-})
-
-// route----------------------------------
-
-app.get('/api/users' , (req,res) =>{
-    // x - means custom header
-    res.setHeader("X-MyName", "OM sallu");
-    return res.json(users);
 });
 
+// route--------get all users-----------------
 
+app.get('/api/users' , async (req,res) =>{
+   const allDbUsers = await User.find({});
+    // x - means custom header
+    res.setHeader("X-MyName", "OM sallu");
+    return res.json(allDbUsers);
+});
+
+// by id
  app 
  .route("/api/users/:id")  //  app.route("/api/users/:id") for specific user 
- .get((req,res) =>{
-    
-      const id = Number(req.params.id);
-    const user = users.find((user) => user.id === id);
+ .get(async (req,res) =>{
+    const user = await User.findById(req.params.id);
+
+    if(!user) return res.status(404).json({error: 'user not found'});
     return res.json(user);
  })
-
- .post((req,res) =>{
+// create user mdb
+ app.post("/api/users", async (req,res) =>{
     const body = req.body;
-    console.log("Body",body);
-    // add data in mock folder
-    users.push({ id: users.length + 1  , ...body // +1 
-    });
-    // not sync
-     fs.writeFile('./MOCK_DATA.json',
-        // null - replacer / 2 intendation (space)
-         JSON.stringify(users,null,2), (err, data ) =>{
-        return res.json({ status: "Success", id: users.length + 1
-        });
-    });
- })
-.patch((req,res) =>{
-      return res.json({ status: "pending"});
- })
- .delete((req,res) =>{
-      return res.json({ status: "pending"});
+
+    if(
+      !body ||
+       !body.first_name ||
+       !body.last_name ||
+        !body.email ||
+          !body.gender ||
+           !body.job_title )
+           {
+           return res
+           .status(400)
+           .json({ status: "Bad request all field required"});
+           }
+   const result = await User.create({
+      firstName: body.first_name ,
+      lastName: body.last_name,
+      email: body.email,
+      gender: body.gender,
+      jobTitle: body.job_title,
+    },
+   );
+    return res.status(201).json({
+       msg: "successfuly inserted in mangodb", 
+      });
+ });
+app.patch("/api/users/:id", async (req,res) =>{
+   await User.findByIdAndUpdate(req.params.id, 
+      { lastName: "Changed"}
+   );
+      return res.json({ status: "Success"});
+ });
+ app.delete("/api/users/:id", async(req,res) =>{
+   await User.findByIdAndDelete(req.params.id)
+      return res.json({ status: "Successed"});
  });
 
 
