@@ -21,5 +21,5 @@ app.use(logReqRes('log.txt'));
 // -Routes------------
 app.use("/api/users", userRouter);
 
- // route
+ // route listen
 app.listen(8000, ()=> console.log(`rest api started..at ${PORT}`));
