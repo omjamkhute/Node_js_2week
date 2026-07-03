@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 1782933155955: GET: /api/users1782933219215: GET: /api/users
 1782933246272: GET: /api/users/101
 1782933252879: GET: /api/users/104
@@ -104,3 +105,32 @@
 1783112556730: GET: ::1: /api/users/6a46b97504c4f961b40e894e
 1783112605154: GET: ::1: /api/users/6a46b99c04c4f961b40e8950
 1783112610726: PATCH: ::1: /api/users/6a46b99c04c4f961b40e8950
+=======
+ versoning
+  "express": "^5.2.1"
+
+
+  1st - 5
+  2nd - 2
+  3rd - 1
+
+  --> 3rd - minor fixes (optional)
+  example: typo error fixes
+
+  --> 2nd - recommanded bug fix (security)
+  example: needed feature added
+
+  --> 3rd - major released
+
+  Note: npm i express@5.5.0 we can add according to us
+  1. Dont change version for existing project
+
+ A.  n0te : (^) dont change version with ^ this 
+   ex: ^5 dont change to 6 or 4 | allow 2 or 3 place change 
+   lock major release 
+   without ^ we can manualy update
+
+B . n0te : (~)  We dont want to change 2nd place also
+     "express": "~5.2.1" 
+     dont change recommnded version too
+>>>>>>> 82fc5a699c5237a4034ebf50e98e5cbf5c773f2b

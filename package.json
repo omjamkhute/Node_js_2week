@@ -1,24 +1,42 @@
 {
+<<<<<<< HEAD
   "name": "rest_api",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
+=======
+  "name": "http_in_node",
+  "version": "1.0.0",
+  "description": "http server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index"
+>>>>>>> 82fc5a699c5237a4034ebf50e98e5cbf5c773f2b
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/omjamkhute/Node_js_2week.git"
   },
+<<<<<<< HEAD
   "author": "om j",
+=======
+  "author": "oj-b",
+>>>>>>> 82fc5a699c5237a4034ebf50e98e5cbf5c773f2b
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/omjamkhute/Node_js_2week/issues"
   },
   "homepage": "https://github.com/omjamkhute/Node_js_2week#readme",
+<<<<<<< HEAD
   "description": "",
   "dependencies": {
     "express": "^5.2.1",
     "mongoose": "^9.7.3",
     "nodemon": "^3.1.14"
+=======
+  "dependencies": {
+    "express": "^5.2.1"
+>>>>>>> 82fc5a699c5237a4034ebf50e98e5cbf5c773f2b
   }
 }
