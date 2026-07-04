@@ -1,3 +1,0 @@
-Schema - define structure
-    schema model
-    using model do CRUDE  op

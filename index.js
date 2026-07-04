@@ -1,48 +1,35 @@
-
-const express = require("express");
-//db
-const { connectMongoDb } = require("./connection.js");
-// middleware
-const { logReqRes } = require('./middlewares/index');
-// routes
-const userRouter =require('./routes/user');
-// app instance
+const express = require('express');
+const {  connectToMongoDB } = require('./connect')
+const urlRoute = require('./routes/url');
+const URL = require('./models/url');
+const shortid = require('shortid');
+//const { exp } = require('firebase/firestore/pipelines');
+// create app
 const app = express();
-const PORT = 8000;
+const PORT = 8001;
 
-// connection monogodb
-connectMongoDb("mongodb://127.0.0.1:27017/youtube-app-1")
-.then(()=> console.log("MongoDb connect"));
+connectToMongoDB('mongodb://localhost:27017/short-url')
+.then(() => console.log('db connected'));
 
-// Middleware plugin----------------------------------------------------------
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: false }));
-app.use(logReqRes('log.txt'));
+// middlewares
+app.use(express.json());
+// router
+app.use('/url', urlRoute);
 
-// -Routes------------
-app.use("/api/users", userRouter);
-
- // route listen
-app.listen(8000, ()=> console.log(`rest api started..at ${PORT}`));
-
-
-
-const express = require("express");
-const app = express();
-
-app.get("/", (req,res) =>{
-    return res.send("Express Home: ");
-});
-
-app.get("/about", (req,res) =>{
-    return res.send(`Great to see : ${req.query.name}`);
-});
-// http://localhost:3000/about?name=+ojexpress
-
-// replace---
-// const myServer = http.createServer(app);
-// myServer.listen(3000, ()=> console.log("server started ......"));
-
-app.listen(3000, () => console.log("server start-----"));
-
-
+// get
+app.get('/:shortId', async (req,res) =>{
+   const shortId = req.params.shortId;
+  const entry = await URL.findOneAndUpdate(
+    { shortId },
+     { 
+        $push: {
+            visitedHistory: {
+                timestamp: Date.now(),
+            },
+   },
+}
+)
+   res.redirect(entry.redirectURL);
+})
+// server listen
+app.listen(PORT ,() => console.log(`${PORT} ACTIVATED`));
