@@ -45,22 +45,22 @@ async function handleGenerateNewShortURL(req, res) {
         return res.status(400).json({ error: 'url is required' });
     }
 
-    const shortID = shortid.generate();
+    const shortID = shortid();
 
     // Create the new shortened URL entry in your database
     await URL.create({
         shortId: shortID,
         redirectURL: body.url,
         visitedHistory: [],
+          createdBy: req.user._id,
     });
 
     // Fetch all URLs to display in the table (optional, depending on your UI)
-    const urlsArray = await URL.find();
+    // const urlsArray = await URL.find();
 
     // Render your EJS home page with the new short ID and all URLs
     return res.render('home', {
         id: shortID,
-        urls: urlsArray,
     });
 }
 

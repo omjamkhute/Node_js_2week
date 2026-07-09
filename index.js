@@ -1,11 +1,15 @@
 const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
 const {  connectToMongoDB } = require('./connect')
-const urlRoute = require('./routes/url');
+const {  restrictToLoggedinUserOnly, checkAuth } = require("./middleware/auth");
 const URL = require('./models/url');
 const shortid = require('shortid');
+
+// routers
+const urlRoute = require('./routes/url');
 const staticRoute = require('./routes/staticRouter');
-const path = require('path');
-//const { exp } = require('firebase/firestore/pipelines');
+const userRoute = require('./routes/user');
 // create app
 const app = express();
 const PORT = 8001;
@@ -18,11 +22,13 @@ app.set('views', path.resolve('./views'));
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
+app.use(cookieParser());
 //test
 
 // router
-app.use('/url', urlRoute);
-app.use("/",staticRoute);
+app.use('/url', restrictToLoggedinUserOnly, urlRoute);
+app.use('/user', userRoute);
+app.use("/",checkAuth, staticRoute);
 // get
 app.get('/:shortId', async (req,res) =>{
    const shortId = req.params.shortId;
@@ -34,9 +40,9 @@ app.get('/:shortId', async (req,res) =>{
                 timestamp: Date.now(),
             },
    },
-}
-)
+  },
+);
    res.redirect(entry.redirectURL);
-})
+});
 // server listen
 app.listen(PORT ,() => console.log(`${PORT} ACTIVATED`));
